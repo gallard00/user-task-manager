@@ -10,6 +10,6 @@ public interface UserService {
     List<UserResponse> getAllUsers();
     UserResponse getUserById(String id);
     UserResponse updateUser(String id, UserRequest request);
-    void deleteTask(String id);
+    void deleteUserById(String userId);
     void clearTasksFromUser(String userId);
 }

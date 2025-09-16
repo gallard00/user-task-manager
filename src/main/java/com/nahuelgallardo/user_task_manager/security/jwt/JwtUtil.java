@@ -1,4 +1,4 @@
-package com.nahuelgallardo.user_task_manager.security;
+package com.nahuelgallardo.user_task_manager.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

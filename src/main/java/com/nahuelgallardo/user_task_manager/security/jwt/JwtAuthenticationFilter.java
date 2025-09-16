@@ -1,5 +1,6 @@
-package com.nahuelgallardo.user_task_manager.security;
+package com.nahuelgallardo.user_task_manager.security.jwt;
 
+import com.nahuelgallardo.user_task_manager.security.user.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

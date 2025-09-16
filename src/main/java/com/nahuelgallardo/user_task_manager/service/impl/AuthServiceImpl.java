@@ -6,13 +6,15 @@ import com.nahuelgallardo.user_task_manager.dto.response.AuthResponse;
 import com.nahuelgallardo.user_task_manager.model.Role;
 import com.nahuelgallardo.user_task_manager.model.User;
 import com.nahuelgallardo.user_task_manager.repository.UserRepository;
-import com.nahuelgallardo.user_task_manager.security.JwtUtil;
+import com.nahuelgallardo.user_task_manager.security.jwt.JwtUtil;
 import com.nahuelgallardo.user_task_manager.service.AuthService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -41,7 +43,8 @@ public class AuthServiceImpl implements AuthService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ROLE_USER)
+                .role(request.getRole() != null ? request.getRole() : Role.ROLE_USER) // importante
+                .taskIds(new ArrayList<>())
                 .build();
 
         userRepository.save(u);

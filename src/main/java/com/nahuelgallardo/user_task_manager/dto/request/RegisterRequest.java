@@ -1,5 +1,6 @@
 package com.nahuelgallardo.user_task_manager.dto.request;
 
+import com.nahuelgallardo.user_task_manager.model.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,4 +10,5 @@ public class RegisterRequest {
     private String name;
     private String email;
     private String password;
+    private Role role;
 }

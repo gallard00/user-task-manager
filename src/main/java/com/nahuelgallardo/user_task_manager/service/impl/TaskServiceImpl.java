@@ -13,6 +13,7 @@ import com.nahuelgallardo.user_task_manager.service.TaskService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,9 +59,27 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTask(String id) {
-        taskRepository.deleteById(id);
+    public void deleteTask(String taskId) {
+        Optional<Task> taskOpt = taskRepository.findById(taskId);
+
+        if (taskOpt.isPresent()) {
+            // Buscar todos los usuarios que tengan esta taskId
+            List<User> usersWithTask = userRepository.findAll().stream()
+                    .filter(user -> user.getTaskIds() != null && user.getTaskIds().contains(taskId))
+                    .toList();
+
+            // Remover la tarea de cada usuario y guardar
+            for (User user : usersWithTask) {
+                user.getTaskIds().remove(taskId);
+                userRepository.save(user);
+            }
+
+            // Finalmente borrar la tarea
+            taskRepository.deleteById(taskId);
+        }
+        // Si no existe, simplemente no hace nada
     }
+
 
     @Override
     public TaskResponse createTaskForUser(String userId, CreateTaskRequest request) {

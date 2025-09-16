@@ -7,6 +7,7 @@ import com.nahuelgallardo.user_task_manager.dto.response.UserResponse;
 import com.nahuelgallardo.user_task_manager.service.TaskService;
 import com.nahuelgallardo.user_task_manager.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,10 +42,10 @@ public class UserController {
     public UserResponse update(@PathVariable String id, @RequestBody UserRequest request) {
         return userService.updateUser(id, request);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
-        userService.deleteTask(id);
+        userService.deleteUserById(id);
     }
 
     @GetMapping("/{id}/tasks")

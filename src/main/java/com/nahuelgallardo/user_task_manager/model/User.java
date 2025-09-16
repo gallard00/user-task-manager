@@ -18,8 +18,12 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private Role role;
+
+    @Builder.Default
+    private Role role = Role.ROLE_USER; // valor por defecto
 
     //referencia de tareas
     private List<String> taskIds;
+
+
 }

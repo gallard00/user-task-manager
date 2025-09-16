@@ -1,4 +1,4 @@
-package com.nahuelgallardo.user_task_manager.security;
+package com.nahuelgallardo.user_task_manager.security.user;
 
 import com.nahuelgallardo.user_task_manager.model.User;
 import com.nahuelgallardo.user_task_manager.repository.UserRepository;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
+
     private final UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository repo) {

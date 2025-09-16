@@ -1,4 +1,4 @@
-package com.nahuelgallardo.user_task_manager.security;
+package com.nahuelgallardo.user_task_manager.security.user;
 
 import com.nahuelgallardo.user_task_manager.model.User;
 import lombok.Getter;
@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 @Getter
 public class CustomUserDetails implements UserDetails {
+
     private final User user;
 
     public CustomUserDetails(User user) {
@@ -38,4 +39,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() { return true; }
+
+    public User getUser() {
+        return user;
+    }
 }

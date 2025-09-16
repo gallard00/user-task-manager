@@ -7,6 +7,7 @@ import com.nahuelgallardo.user_task_manager.model.Task;
 import com.nahuelgallardo.user_task_manager.model.User;
 import com.nahuelgallardo.user_task_manager.repository.TaskRepository;
 import com.nahuelgallardo.user_task_manager.repository.UserRepository;
+import com.nahuelgallardo.user_task_manager.service.TaskService;
 import com.nahuelgallardo.user_task_manager.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
     private final UserMapper userMapper;
+    private final TaskService taskService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TaskRepository taskRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, TaskRepository taskRepository, TaskService taskService) {
         this.userRepository = userRepository;
         this.taskRepository = taskRepository;
         this.userMapper = userMapper;
+        this.taskService = taskService;
     }
 
     @Override
@@ -55,23 +58,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteTask(String id) {
-        Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+    public void deleteUserById(String userId) {
+        // Primero obtengo el usuario
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Buscar todos los usuarios que tengan esta taskId
-        List<User> usersWithTask = userRepository.findAll().stream()
-                .filter(user -> user.getTaskIds() != null && user.getTaskIds().contains(id))
-                .toList();
-
-        // Remover la tarea de cada usuario y guardar
-        for (User user : usersWithTask) {
-            user.getTaskIds().remove(id);
-            userRepository.save(user);
+        // Si el usuario tiene tareas, las borro una por una
+        if (user.getTaskIds() != null && !user.getTaskIds().isEmpty()) {
+            for (String taskId : user.getTaskIds()) {
+                taskService.deleteTask(taskId);  // Usa el método que ajustamos
+            }
         }
 
-        // Finalmente borrar la tarea
-        taskRepository.deleteById(id);
+        // Finalmente, borro al usuario
+        userRepository.deleteById(userId);
     }
 
     @Override
