@@ -15,6 +15,8 @@ public class Task {
     private String id;
     private String title;
     private String description;
-    private boolean completed = false;
     private String userId; // dueño de la tarea
+
+    @Builder.Default
+    private TaskStatus status = TaskStatus.PENDING;
 }

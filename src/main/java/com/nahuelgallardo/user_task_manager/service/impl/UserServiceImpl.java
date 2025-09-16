@@ -73,4 +73,14 @@ public class UserServiceImpl implements UserService {
         // Finalmente borrar la tarea
         taskRepository.deleteById(id);
     }
+
+    @Override
+    public void clearTasksFromUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Limpiar las referencias de las tareas
+        user.getTaskIds().clear();
+        userRepository.save(user);
+    }
 }

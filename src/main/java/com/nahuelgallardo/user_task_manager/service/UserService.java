@@ -11,4 +11,5 @@ public interface UserService {
     UserResponse getUserById(String id);
     UserResponse updateUser(String id, UserRequest request);
     void deleteTask(String id);
+    void clearTasksFromUser(String userId);
 }

@@ -6,6 +6,7 @@ import com.nahuelgallardo.user_task_manager.dto.response.TaskResponse;
 import com.nahuelgallardo.user_task_manager.dto.response.UserResponse;
 import com.nahuelgallardo.user_task_manager.service.TaskService;
 import com.nahuelgallardo.user_task_manager.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,5 +58,11 @@ public class UserController {
             @RequestBody CreateTaskRequest request
     ) {
         return taskService.createTaskForUser(userId, request);
+    }
+
+    @DeleteMapping("/{userId}/tasks")
+    public ResponseEntity<Void> clearTasks(@PathVariable String userId) {
+        userService.clearTasksFromUser(userId);
+        return ResponseEntity.noContent().build();
     }
 }

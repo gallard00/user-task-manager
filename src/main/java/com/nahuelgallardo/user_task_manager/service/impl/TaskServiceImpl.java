@@ -5,6 +5,7 @@ import com.nahuelgallardo.user_task_manager.dto.request.TaskRequest;
 import com.nahuelgallardo.user_task_manager.dto.response.TaskResponse;
 import com.nahuelgallardo.user_task_manager.mapper.TaskMapper;
 import com.nahuelgallardo.user_task_manager.model.Task;
+import com.nahuelgallardo.user_task_manager.model.TaskStatus;
 import com.nahuelgallardo.user_task_manager.model.User;
 import com.nahuelgallardo.user_task_manager.repository.TaskRepository;
 import com.nahuelgallardo.user_task_manager.repository.UserRepository;
@@ -71,7 +72,6 @@ public class TaskServiceImpl implements TaskService {
         Task task = Task.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
-                .completed(false)
                 .userId(userId)
                 .build();
 
@@ -100,4 +100,27 @@ public class TaskServiceImpl implements TaskService {
                 .map(taskMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void unassignTaskFromUser(String taskId, String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getTaskIds() != null && user.getTaskIds().contains(taskId)) {
+            user.getTaskIds().remove(taskId);
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("Task not assigned to this user");
+        }
+    }
+
+    @Override
+    public Task updateTaskStatus(String id, TaskStatus status) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+
+        task.setStatus(status);
+        return taskRepository.save(task);
+    }
+
 }

@@ -1,8 +1,11 @@
 package com.nahuelgallardo.user_task_manager.controller;
 
 import com.nahuelgallardo.user_task_manager.dto.request.TaskRequest;
+import com.nahuelgallardo.user_task_manager.dto.request.UpdateTaskStatusRequest;
 import com.nahuelgallardo.user_task_manager.dto.response.TaskResponse;
+import com.nahuelgallardo.user_task_manager.model.Task;
 import com.nahuelgallardo.user_task_manager.service.TaskService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,4 +48,22 @@ public class TaskController {
     public List<TaskResponse> getByUserId(@PathVariable String userId) {
         return taskService.getTasksByUserId(userId);
     }
+
+    @DeleteMapping("/{taskId}/users/{userId}")
+    public ResponseEntity<Void> unassignUserFromTask(
+            @PathVariable String taskId,
+            @PathVariable String userId) {
+        taskService.unassignTaskFromUser(taskId, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{taskId}/status")
+    public ResponseEntity<Task> updateTaskStatus(
+            @PathVariable String taskId,
+            @RequestBody UpdateTaskStatusRequest request) {
+        Task updatedTask = taskService.updateTaskStatus(taskId, request.getStatus());
+        return ResponseEntity.ok(updatedTask);
+    }
+
+
 }
