@@ -36,7 +36,7 @@ Docker Desktop
 
 ⚙️ Cómo ejecutar el proyecto
 1. Clonar el repositorio
-git clone https://github.com/tu-usuario/user-task-manager.git
+git clone https://github.com/gallard00/user-task-manager.git
 cd user-task-manager
 
 2. Generar el .jar
