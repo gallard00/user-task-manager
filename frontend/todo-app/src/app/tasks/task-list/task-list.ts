@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TaskService, TaskDto } from '../task.service';
 
 @Component({
   selector: 'app-task-list',
@@ -10,18 +11,40 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './task-list.scss'
 })
 export class TaskList {
-  tasks: string[] = ['Aprender Angular 20', 'Conectar con backend', 'Hacer deploy'];
-  newTask: string = '';
+  private api = inject(TaskService);
+  tasks: TaskDto[] = [];
+  newTitle = '';
 
-  addTask() {
-    if (this.newTask.trim()) {
-      this.tasks.push(this.newTask.trim());
-      this.newTask = '';
-    }
+  ngOnInit() { this.reload(); }
+
+  reload() {
+    this.api.list().subscribe({
+      next: (list) => this.tasks = list,
+      error: (e) => console.error('Error list()', e)
+    });
   }
 
-  removeTask(index: number) {
-    this.tasks.splice(index, 1);
+  add() {
+    if (!this.newTitle.trim()) return;
+    this.api.create({ title: this.newTitle.trim() }).subscribe({
+      next: () => { this.newTitle = ''; this.reload(); },
+      error: (e) => console.error('Error create()', e)
+    });
+  }
+
+  toggle(t: TaskDto) {
+    this.api.toggle(t.id).subscribe({
+      next: () => this.reload(),
+      error: (e) => console.error('Error toggle()', e)
+    });
+  }
+
+  del(t: TaskDto) {
+    this.api.remove(t.id).subscribe({
+      next: () => this.reload(),
+      error: (e) => console.error('Error remove()', e)
+    });
   }
 }
+
 
