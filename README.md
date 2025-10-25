@@ -64,9 +64,15 @@ spring.data.mongodb.database=rest_api_auth
 jwt.secret=tu_secreto_seguro_aqui
 jwt.expiration=86400000
 server.port=8080
+
+```
+
+
 💡 Si usás MongoDB Atlas, reemplazá el mongodb://localhost:27017 por tu URI de conexión.
 
-🔑 Endpoints principales
+---
+
+## 🔑 Endpoints principales
 Método	Endpoint	Descripción	Autenticación
 POST	/api/auth/register	Registrar nuevo usuario	❌ No requiere
 POST	/api/auth/login	Iniciar sesión y obtener token JWT	❌ No requiere
@@ -74,10 +80,12 @@ GET	/api/users	Listar todos los usuarios	✅ Requiere token
 GET	/api/users/{id}	Obtener usuario por ID	✅ Requiere token
 DELETE	/api/users/{id}	Eliminar usuario	✅ Requiere token ADMIN
 
-🧠 Ejemplo de uso en Postman
+---
+
+## 🧠 Ejemplo de uso en Postman
 Registrar usuario
 
-
+```
 POST http://localhost:8080/api/auth/register
 
 {
@@ -87,40 +95,50 @@ POST http://localhost:8080/api/auth/register
   "password": "123456",
   "role": "ROLE_USER"
 }
-Login
-
+```
+ Login
+```
 
 POST http://localhost:8080/api/auth/login
-json
-Copiar código
+```
+```
 {
   "email": "nahuel@test.com",
   "password": "123456"
 }
-Respuesta:
+```
+ Respuesta:
+```
 
-json
-Copiar código
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI..."
 }
+
+```
 Acceso con token (Bearer)
 
 En la pestaña Authorization → Type → Bearer Token
 
 Pegá el token generado
 
-🧪 Ejecución del proyecto
+---
+
+## 🧪 Ejecución del proyecto
 🔹 Opción 1 – Desde IntelliJ / IDE
 Ejecutar la clase principal:
-
+```
 
 RestApiAuthApplication.java
+
+```
 🔹 Opción 2 – Desde consola
-
+```
 mvn spring-boot:run
-🧰 Dependencias principales (pom.xml)
+```
+---
 
+##🧰 Dependencias principales (pom.xml)
+```
 <dependencies>
     <!-- Spring Boot Starter Web -->
     <dependency>
@@ -173,16 +191,19 @@ mvn spring-boot:run
         <version>2.6.0</version>
     </dependency>
 </dependencies>
-📄 Licencia
+```
+---
+## 📄 Licencia
 Este proyecto está bajo la licencia MIT.
 Podés usarlo, modificarlo y distribuirlo libremente.
-
-👨‍💻 Autor
+---
+## 👨‍💻 Autor
 Nahuel Gallardo
 📍 Miramar, Buenos Aires
 🔗 [LinkedIn](https://www.linkedin.com/in/nahuelgallard00/)
 💻 [GitHub](https://github.com/gallard00)
-
+---
 Copyright (c) 2025 Nahuel Gallardo
-🌟 Inspiración
+--
+## 🌟 Inspiración
 Este proyecto forma parte de mi portfolio profesional y está pensado como base sólida para sistemas de autenticación y gestión de usuarios con Spring Boot + JWT.
