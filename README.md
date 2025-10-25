@@ -1,112 +1,146 @@
-📝 User Task Manager API
+# 🛡️ REST API Auth - Spring Boot 3 + JWT + MariaDB
 
-API REST desarrollada en Java Spring Boot con MongoDB, que permite la gestión de usuarios y tareas.
-Incluye autenticación con JWT, control de acceso por roles (USER / ADMIN) y soporte para Docker.
+![Java](https://img.shields.io/badge/Java-23-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen)
+![JWT](https://img.shields.io/badge/Security-JWT-blue)
+![Database](https://img.shields.io/badge/Database-MariaDB-lightblue)
+![License](https://img.shields.io/badge/license-MIT-yellow)
+![Status](https://img.shields.io/badge/status-Active-success)
 
-🚀 Características principales
+---
 
-CRUD de Usuarios y Tareas.
+## 📖 Descripción
 
-Relación entre usuarios y sus tareas.
+Este proyecto es una **API REST de autenticación** desarrollada con **Spring Boot 3**, **Spring Security 6** y **JWT (JSON Web Tokens)**.  
+Permite el registro, login y autenticación de usuarios, gestionando roles y tokens de acceso.  
+Ideal como base para proyectos que necesiten seguridad y control de usuarios.
 
-Estados de tareas: PENDING, IN_PROGRESS, DONE.
+---
 
-Seguridad con JWT:
+## ⚙️ Tecnologías utilizadas
 
-ROLE_USER → CRUD básico de sus tareas.
+- ☕ **Java 23 (Valhalla EA)**
+- 🌱 **Spring Boot 3.5.6**
+- 🔐 **Spring Security 6.5.5**
+- 💾 **JPA / Hibernate**
+- 🧩 **MariaDB**
+- 🧰 **Lombok**
+- 📘 **Swagger / OpenAPI**
+- 🧪 **Postman (para testing de endpoints)**
 
-ROLE_ADMIN → administración completa, incluyendo eliminación de usuarios.
+---
 
-Integración con MongoDB.
+## 📂 Estructura del proyecto
 
-Configuración con Docker y Docker Compose (API + MongoDB).
+src/
+├── config/ # Configuración de seguridad
+├── controller/ # Controladores REST
+├── dto/ # Objetos de transferencia (Request/Response)
+├── exception/ # Manejo global de errores
+├── mapper/ # Conversión entre entidades y DTOs
+├── model/ # Entidades JPA
+├── repository/ # Interfaces de persistencia
+├── security/
+│ ├── jwt/ # Filtros y utilidades JWT
+│ └── user/ # Implementación de UserDetails
+├── service/ # Interfaces de lógica de negocio
+├── service/impl/ # Implementaciones de servicios
+└── RestApiAuthApplication # Clase principal
 
-Probado con Postman.
+---
 
-📦 Requisitos previos
+## 🚀 Cómo ejecutar el proyecto
 
-Docker Desktop
- instalado y corriendo.
+### 1️⃣ Clonar el repositorio
+```bash
+git clone https://github.com/gallard00/rest-api-auth.git
+cd rest-api-auth
+2️⃣ Configurar la base de datos
+Editar el archivo src/main/resources/application.properties:
 
-(Opcional) MongoDB Compass
- para visualizar la base de datos.
+properties
+spring.datasource.url=jdbc:mariadb://localhost:3306/rest_api_auth
+spring.datasource.username=root
+spring.datasource.password=tu_contraseña
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
 
-(Opcional) Postman
- para probar los endpoints.
+# JWT
+jwt.secret=secret_key_123456
+jwt.expiration=86400000
+3️⃣ Ejecutar la aplicación
+bash
+Copiar código
+./mvnw spring-boot:run
+La API correrá en:
+👉 http://localhost:8080
 
-⚙️ Cómo ejecutar el proyecto
-1. Clonar el repositorio
-git clone https://github.com/gallard00/user-task-manager.git
-cd user-task-manager
+🔐 Endpoints principales
+🔸 Autenticación
+Método	Endpoint	Descripción
+POST	/api/auth/register	Registra un nuevo usuario
+POST	/api/auth/login	Inicia sesión y devuelve el token JWT
 
-2. Generar el .jar
-mvn clean package -DskipTests
+🔸 Usuarios (Requiere token)
+Método	Endpoint	Descripción
+GET	/api/users	Obtiene todos los usuarios
+GET	/api/users/{id}	Obtiene un usuario por ID
+POST	/api/users	Crea un nuevo usuario
+PUT	/api/users/{id}	Actualiza un usuario
+DELETE	/api/users/{id}	Elimina un usuario
 
-3. Levantar con Docker
-docker-compose up --build
+🧩 Ejemplo de uso con Postman
+1️⃣ Registro
+json
+Copiar código
+POST http://localhost:8080/api/auth/register
+{
+  "name": "Nahuel",
+  "lastName": "Gallardo",
+  "email": "nahuel@test.com",
+  "password": "123456",
+  "role": "ROLE_USER"
+}
+2️⃣ Login
+json
+Copiar código
+POST http://localhost:8080/api/auth/login
+{
+  "email": "nahuel@test.com",
+  "password": "123456"
+}
+🔁 Respuesta:
+
+json
+Copiar código
+{
+  "token": "eyJhbGciOiJIUzI1NiIs..."
+}
+3️⃣ Acceso a endpoints protegidos
+Agregar en el header:
 
 
-Esto levantará:
+Authorization: Bearer <token>
+🧱 Base de datos
+Campo	Tipo	Descripción
+id	BIGINT	ID autogenerado
+email	VARCHAR	Correo único
+name	VARCHAR	Nombre
+last_name	VARCHAR	Apellido
+password	VARCHAR	Contraseña cifrada
+role	VARCHAR	Rol del usuario
 
-API → http://localhost:8080
+🧑‍💻 Autor
+Nahuel Gallardo
+💼 Analista en Programación y Desarrollo de Aplicaciones
+🔗 https://www.linkedin.com/in/nahuelgallard00/
+🐙 [GitHub](https://github.com/gallard00)
 
-MongoDB → mongodb://localhost:27017/user_task_db
+🪪 Licencia
+Este proyecto está bajo la licencia MIT — podés usarlo, modificarlo y distribuirlo libremente.
 
-🔑 Endpoints principales
-Autenticación
-
-POST /api/auth/register → registrar usuario.
-
-POST /api/auth/login → login, devuelve JWT.
-
-Usuarios
-
-GET /api/users → listar usuarios (solo admin).
-
-DELETE /api/users/{id} → eliminar usuario (solo admin).
-
-Tareas
-
-POST /api/tasks → crear tarea.
-
-GET /api/tasks → listar tareas.
-
-PATCH /api/tasks/{id}/status → cambiar estado (PENDING, IN_PROGRESS, DONE).
-
-🔒 Seguridad con JWT
-
-Todos los endpoints (excepto register y login) requieren autenticación.
-Debes incluir en Postman el header:
-
-Authorization: Bearer <tu_token_jwt>
-
-📊 Base de datos
-
-La app usa MongoDB con estas colecciones:
-
-users → usuarios registrados.
-
-tasks → tareas con estados y relación a usuarios.
-
-🐳 Docker
-
-Contenedores definidos en docker-compose.yml:
-
-app → Spring Boot API
-
-mongo → base de datos MongoDB con volumen persistente
-
-Comandos útiles:
-
-docker ps                  # listar contenedores activos
-docker logs -f app         # ver logs de la API
-docker exec -it mongo mongosh   # entrar a Mongo
-docker-compose down        # apagar todo
-
-📌 Próximos pasos
-
-Documentación automática con Swagger/OpenAPI.
-
-Tests automatizados con JUnit + Mockito.
-
-Deploy en la nube (AWS / Render / Railway).
+r
+Copiar código
+Copyright (c) 2025 Nahuel Gallardo
+🌟 Inspiración
+Este proyecto forma parte de mi portfolio profesional y está pensado como base sólida para sistemas de autenticación y gestión de usuarios con Spring Boot + JWT.
